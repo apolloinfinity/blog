@@ -1,1 +1,11 @@
-/* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.nav-item {
+    @apply text-white mr-6
+}
+
+.nav-link {
+    @apply block mt-4 lg:inline-block lg:mt-0 text-teal-100 hover:text-white mr-4
+}

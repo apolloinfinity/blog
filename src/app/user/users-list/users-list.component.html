@@ -1,13 +1,12 @@
-<div *ngIf="users$ | async as users">
-  <div *ngFor="let user of users">
-    <div class="card border-2 py-4 my-4">
+<div *ngIf="vm$ | async as vm">
+  <div *ngFor="let user of vm.users">
+    <div class="card border-2">
       <div class="card-header">
         <h2>{{ user.name }}</h2>
       </div>
       <div class="card-body">
         <section>
           <h3>User Posts</h3>
-          3
         </section>
       </div>
     </div>

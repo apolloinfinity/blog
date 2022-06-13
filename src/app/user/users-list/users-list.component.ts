@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { catchError, combineLatest, EMPTY, map, Subject } from 'rxjs';
+
+import { PostsService } from '../services/posts.service';
 import { UserService } from '../services/user.service';
 
 @Component({
@@ -7,9 +10,20 @@ import { UserService } from '../services/user.service';
   styleUrls: ['./users-list.component.css'],
 })
 export class UsersListComponent implements OnInit {
+  private errorMessageSubject = new Subject<string>();
+
+  errorMessage$ = this.errorMessageSubject.asObservable();
   users$ = this.userService.users$;
 
-  constructor(private userService: UserService) {}
+  userPosts$ = this.posts.userPosts$.pipe(
+    catchError((err) => {
+      this.errorMessageSubject.next(err);
+      return EMPTY;
+    })
+  );
+  vm$ = combineLatest([this.users$, this.userPosts$]);
+
+  constructor(private userService: UserService, private posts: PostsService) {}
 
   ngOnInit(): void {}
 }

@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+    @apply bg-gray-100;
+}
+
 .nav-item {
     @apply text-white mr-6;
 }
@@ -10,12 +14,29 @@
     @apply block mt-4 lg:inline-block lg:mt-0 text-teal-100 hover:text-white mr-4;
 }
 
-.card,
+.card {
+    @apply bg-white shadow-md border-2 rounded-xl;
+}
 
+.card,
 .card-body {
     @apply p-4 my-4;
 }
 
 .card-header {
-    @apply border-b font-bold pb-3;
+    @apply border-b pb-3 items-center justify-between;
+}
+
+.card-header span {
+    @apply font-bold;
+}
+
+.card-footer {
+    @apply flex border-t pb-3 pt-6 items-center justify-end;
+}
+
+
+
+.btn { 
+    @apply  flex items-center justify-center gap-2 rounded-full bg-cyan-700 px-5 py-3 text-lg font-medium text-white
 }

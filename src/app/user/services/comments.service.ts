@@ -9,7 +9,11 @@ import { IComments } from 'src/app/shared/IComments';
 })
 export class CommentdService {
   private commentsUrl = 'https://jsonplaceholder.typicode.com/comments';
+
+  comments$ = this._http.get<IComments[]>;
+  
+
   constructor(private _http: HttpClient) {}
 
-  // getComments(): Observable<IComments> {}
+  
 }

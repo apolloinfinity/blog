@@ -8,8 +8,8 @@ import { catchError, Observable, shareReplay, tap, throwError } from 'rxjs';
 export class PostsService {
   private commentsUrl = 'https://jsonplaceholder.typicode.com/posts';
 
-  userPosts$ = this._http.get<IPosts[]>(this.commentsUrl).pipe(
-    tap((data) => console.log(JSON.stringify(data))),
+  posts$ = this._http.get<IPosts[]>(this.commentsUrl).pipe(
+    // tap((data) => console.log(data)),
     shareReplay(1),
     catchError(this.handleError)
   );

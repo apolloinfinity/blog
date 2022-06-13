@@ -13,17 +13,17 @@ export class UsersListComponent implements OnInit {
   private errorMessageSubject = new Subject<string>();
 
   errorMessage$ = this.errorMessageSubject.asObservable();
-  users$ = this.userService.users$;
+  // users$ = this.userService.users$;
 
-  userPosts$ = this.posts.userPosts$.pipe(
+  userPosts$ = this.userService.usersPosts$.pipe(
     catchError((err) => {
       this.errorMessageSubject.next(err);
       return EMPTY;
     })
   );
-  vm$ = combineLatest([this.users$, this.userPosts$]);
+  // vm$ = combineLatest([this.users$, this.userPosts$]);
 
-  constructor(private userService: UserService, private posts: PostsService) {}
+  constructor(private userService: UserService) {}
 
   ngOnInit(): void {}
 }

@@ -19,46 +19,20 @@ import { PostsService } from './posts.service';
 export class UserService {
   private usersUrl = 'https://jsonplaceholder.typicode.com/users';
 
-  users$ = this._http.get<IUser[]>(this.usersUrl).pipe(
-    tap((data) => console.log(JSON.stringify(data))),
+  private users$ = this._http.get<IUser[]>(this.usersUrl).pipe(
+    // tap((data) => console.log(data)),
     catchError(this.handleError)
   );
 
-  usersWithPosts$ = combineLatest([
-    this.users$,
-    this.postsService.userPosts$,
-  ]).pipe(
-    map(
-      ([users, posts]) =>
-        users.map(
-          (user) =>
-            ({
-              ...user,
-              name: user.name,
-              username: user.username,
-              email: user.email,
-              address: {
-                street: user.address.street,
-                suite: user.address.suite,
-                city: user.address.city,
-                zipcode: user.address.zipcode,
-                geo: {
-                  lat: user.address.geo.lat,
-                  lng: user.address.geo.lng,
-                },
-                phone: user.phone,
-                website: user.website,
-                company: {
-                  name: user.company.name,
-                  catchPhrase: user.company.catchPhrase,
-                  bs: user.company.bs,
-                },
-                posts: posts.filter((p) => user.id === p.userId),
-              },
-            } as IUser)
-        ),
-      shareReplay(1)
-    )
+  usersPosts$ = combineLatest([this.users$, this.postsService.posts$]).pipe(
+    // tap(console.log),
+    map(([users, posts]) =>
+      users.map((user) => ({
+        ...user,
+        posts: posts.filter((p) => user.id === p.userId),
+      }))
+    ),
+    tap(console.log)
   );
 
   constructor(private _http: HttpClient, private postsService: PostsService) {}

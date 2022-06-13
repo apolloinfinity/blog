@@ -1,35 +1,33 @@
-<div *ngIf="userPosts$ | async as userPosts">
-  <div *ngFor="let user of userPosts">
-    <div class="card">
-      <div class="card-header flex">
-        <div>
-          <h2>
-            Name:
-            <span>
-              {{ user.username }}
-            </span>
-          </h2>
-          <p>
-            Email: <span class="">{{ user.email }}</span>
-          </p>
-        </div>
-        <div class="flex items-center space-x-3">
-          <button class="rounded-2xl border bg-teal-500 px-3 py-1 text-white">
-            Total posts:
-            {{ user.posts.length }}
-          </button>
-        </div>
+<div *ngFor="let user of userPosts$ | async as userPosts">
+  <div class="card">
+    <div class="card-header flex">
+      <div>
+        <h2>
+          Name:
+          <span>
+            {{ user.username }}
+          </span>
+        </h2>
+        <p>
+          Email: <span class="">{{ user.email }}</span>
+        </p>
       </div>
-      <div class="card-body">
-        <section class="">
-          <h3 class="font-bold mr-2">Most recent post:</h3>
-          <p>"{{ user.posts[0].title | uppercase }}"</p>
-        </section>
+      <div class="flex items-center space-x-3">
+        <button class="rounded-2xl border bg-teal-500 px-3 py-1 text-white">
+          Total posts:
+          {{ user.posts.length }}
+        </button>
       </div>
-      <div class="card-footer">
-        <button class="btn mr-4">View Profile</button>
-        <button class="btn">See all posts</button>
-      </div>
+    </div>
+    <div class="card-body">
+      <section class="">
+        <h3 class="font-bold mr-2">Most recent post:</h3>
+        <p>"{{ user.posts[0].title | uppercase }}"</p>
+      </section>
+    </div>
+    <div class="card-footer">
+      <button class="btn mr-4" routerLink="[user.id]">View Profile</button>
+      <button class="btn">See all posts</button>
     </div>
   </div>
 </div>

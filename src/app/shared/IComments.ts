@@ -1,5 +1,7 @@
-export interface IComments {
+export interface CommentApiResponse {
+  postId: number;
+  id: number;
   name: string;
-  catchPhrase: string;
-  bs: string;
+  email: string;
+  body: string;
 }

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import {
   catchError,
   combineLatest,
+  filter,
   map,
   Observable,
   shareReplay,
@@ -10,7 +11,8 @@ import {
   throwError,
 } from 'rxjs';
 
-import { IUser } from '../../shared/IUser';
+import { User, UserApiResponse } from '../../shared/IUser';
+import { CommentsService } from './comments.service';
 import { PostsService } from './posts.service';
 
 @Injectable({
@@ -19,23 +21,33 @@ import { PostsService } from './posts.service';
 export class UserService {
   private usersUrl = 'https://jsonplaceholder.typicode.com/users';
 
-  private users$ = this._http.get<IUser[]>(this.usersUrl).pipe(
-    // tap((data) => console.log(data)),
-    catchError(this.handleError)
-  );
+  private users$ = this._http
+    .get<UserApiResponse[]>(this.usersUrl)
+    .pipe(catchError(this.handleError));
 
-  usersPosts$ = combineLatest([this.users$, this.postsService.posts$]).pipe(
-    // tap(console.log),
-    map(([users, posts]) =>
+  usersData$: Observable<User[]> = combineLatest([
+    this.users$,
+    this.postsService.posts$,
+    this.commentsService.comments$,
+  ]).pipe(
+    map(([users, posts, comments]) =>
       users.map((user) => ({
         ...user,
-        posts: posts.filter((p) => user.id === p.userId),
+        posts: posts
+          .filter((post) => user.id === post.userId)
+          .map((post) => ({
+            ...post,
+            comments: comments.filter((comment) => comment.postId === post.id),
+          })),
       }))
-    ),
-    tap(console.log)
+    )
   );
 
-  constructor(private _http: HttpClient, private postsService: PostsService) {}
+  constructor(
+    private _http: HttpClient,
+    private postsService: PostsService,
+    private commentsService: CommentsService
+  ) {}
 
   private handleError(err: HttpErrorResponse): Observable<never> {
     // in a real world app, we may send the server to some remote logging infrastructure

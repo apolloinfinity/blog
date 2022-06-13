@@ -2,18 +2,15 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { IComments } from 'src/app/shared/IComments';
+import { CommentApiResponse } from 'src/app/shared/IComments';
 
 @Injectable({
   providedIn: 'root',
 })
-export class CommentdService {
+export class CommentsService {
   private commentsUrl = 'https://jsonplaceholder.typicode.com/comments';
 
-  comments$ = this._http.get<IComments[]>;
-  
+  comments$ = this._http.get<CommentApiResponse[]>(this.commentsUrl);
 
   constructor(private _http: HttpClient) {}
-
-  
 }

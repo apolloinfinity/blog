@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { IPosts } from 'src/app/shared/IPosts';
+import { PostApiResponse } from 'src/app/shared/IPosts';
 import { catchError, Observable, shareReplay, tap, throwError } from 'rxjs';
 @Injectable({
   providedIn: 'root',
@@ -8,7 +8,7 @@ import { catchError, Observable, shareReplay, tap, throwError } from 'rxjs';
 export class PostsService {
   private commentsUrl = 'https://jsonplaceholder.typicode.com/posts';
 
-  posts$ = this._http.get<IPosts[]>(this.commentsUrl).pipe(
+  posts$ = this._http.get<PostApiResponse[]>(this.commentsUrl).pipe(
     // tap((data) => console.log(data)),
     shareReplay(1),
     catchError(this.handleError)

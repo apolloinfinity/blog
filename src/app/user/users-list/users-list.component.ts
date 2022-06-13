@@ -15,7 +15,7 @@ export class UsersListComponent implements OnInit {
   errorMessage$ = this.errorMessageSubject.asObservable();
   // users$ = this.userService.users$;
 
-  userPosts$ = this.userService.usersPosts$.pipe(
+  userPosts$ = this.userService.usersData$.pipe(
     catchError((err) => {
       this.errorMessageSubject.next(err);
       return EMPTY;

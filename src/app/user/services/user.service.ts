@@ -10,6 +10,8 @@ import {
   tap,
   throwError,
 } from 'rxjs';
+import { CommentApiResponse } from 'src/app/shared/IComments';
+import { Post, PostApiResponse } from 'src/app/shared/IPosts';
 
 import { User, UserApiResponse } from '../../shared/IUser';
 import { CommentsService } from './comments.service';
@@ -25,22 +27,44 @@ export class UserService {
     .get<UserApiResponse[]>(this.usersUrl)
     .pipe(catchError(this.handleError));
 
+  // userMap: UserMap = {}
+
   usersData$: Observable<User[]> = combineLatest([
     this.users$,
     this.postsService.posts$,
     this.commentsService.comments$,
   ]).pipe(
-    map(([users, posts, comments]) =>
-      users.map((user) => ({
-        ...user,
-        posts: posts
-          .filter((post) => user.id === post.userId)
-          .map((post) => ({
-            ...post,
-            comments: comments.filter((comment) => comment.postId === post.id),
-          })),
-      }))
-    )
+    map(([users, posts, comments]) => {
+      const userMap: Record<number, User> = {};
+      const postMap: Record<number, Post> = {};
+
+      // populates data to the map objects
+      // without them the maps stay empty
+      //
+      users.forEach((user) => {
+        userMap[user.id] = {
+          ...user,
+          posts: [],
+        };
+      });
+
+      posts.forEach((post) => {
+        postMap[post.id] = {
+          ...post,
+          comments: [],
+        };
+      });
+
+      comments.forEach((comment) => {
+        postMap[comment.postId].comments.push(comment);
+      });
+
+      Object.values(postMap).forEach((post) => {
+        userMap[post.userId].posts.push(post);
+      });
+
+      return Object.values(userMap);
+    })
   );
 
   constructor(

@@ -4,6 +4,7 @@ import {
   catchError,
   combineLatest,
   filter,
+  forkJoin,
   map,
   Observable,
   shareReplay,
@@ -27,9 +28,7 @@ export class UserService {
     .get<UserApiResponse[]>(this.usersUrl)
     .pipe(catchError(this.handleError));
 
-  // userMap: UserMap = {}
-
-  usersData$: Observable<User[]> = combineLatest([
+  usersData$: Observable<User[]> = forkJoin([
     this.users$,
     this.postsService.posts$,
     this.commentsService.comments$,
@@ -38,16 +37,12 @@ export class UserService {
       const userMap: Record<number, User> = {};
       const postMap: Record<number, Post> = {};
 
-      // populates data to the map objects
-      // without them the maps stay empty
-      //
       users.forEach((user) => {
         userMap[user.id] = {
           ...user,
           posts: [],
         };
       });
-
       posts.forEach((post) => {
         postMap[post.id] = {
           ...post,

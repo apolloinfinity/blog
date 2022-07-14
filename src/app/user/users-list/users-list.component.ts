@@ -3,11 +3,13 @@ import { catchError, combineLatest, EMPTY, map, Subject } from 'rxjs';
 
 import { PostsService } from '../services/posts.service';
 import { UserService } from '../services/user.service';
+import { UserStore } from '../store/users.store';
 
 @Component({
   selector: 'app-users-list',
   templateUrl: './users-list.component.html',
   styleUrls: ['./users-list.component.css'],
+  providers: [UserStore],
 })
 export class UsersListComponent implements OnInit {
   private errorMessageSubject = new Subject<string>();
@@ -21,9 +23,11 @@ export class UsersListComponent implements OnInit {
       return EMPTY;
     })
   );
-  // vm$ = combineLatest([this.users$, this.userPosts$]);
 
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService, private userStore: UserStore) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.userStore.selectUsers.subscribe((users) => console.log(users));
+    this.userStore.getUsers();
+  }
 }

@@ -1,19 +1,8 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {
-  catchError,
-  combineLatest,
-  filter,
-  forkJoin,
-  map,
-  Observable,
-  shareReplay,
-  tap,
-  throwError,
-} from 'rxjs';
-import { CommentApiResponse } from 'src/app/shared/IComments';
-import { Post, PostApiResponse } from 'src/app/shared/IPosts';
+import { catchError, forkJoin, map, Observable, throwError } from 'rxjs';
 
+import { Post } from 'src/app/shared/IPosts';
 import { User, UserApiResponse } from '../../shared/IUser';
 import { CommentsService } from './comments.service';
 import { PostsService } from './posts.service';
